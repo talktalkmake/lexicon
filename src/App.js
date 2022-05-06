@@ -8,7 +8,11 @@ const ACTION = {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'addWord':
-      return [...state, action.word]
+      return [...state, action.word];
+      break;
+
+    case 'removeWord':
+      return [...state.filter(word => word !== action.word)];
       break;
 
     default:
@@ -20,6 +24,29 @@ function App() {
 
   const [words, dispatch] = useReducer(reducer, [])
   const [word, setWord] = useState('')
+
+  function ListWords({ words }) {
+    return (words.length === 0)
+      ? <p>There are no words</p>
+      : <>
+        <table>
+          <tbody>
+            {words.map((word, i) => {
+              return (
+                <tr key={`${word}-${i}`}>
+                  <td>{word}</td>
+                  <td><button onClick={() => removeWord(word)} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </>
+  }
+
+  function removeWord(word) {
+    dispatch({ type: 'removeWord', word })
+  }
 
   return (
     <div className="App">
@@ -58,22 +85,3 @@ function getter() {
 }
 
 export default App;
-
-function ListWords({ words }) {
-  return (words.length === 0)
-    ? <p>There are no words</p>
-    : <>
-      <table>
-        <tbody>
-          {words.map((word, i) => {
-            return (
-              <tr key={`${word}-${i}`}>
-                <td>{word}</td>
-                <td><button className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </>
-}
