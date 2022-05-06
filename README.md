@@ -1,3 +1,7 @@
+### TailwindCSS
+Run TailwindCSS:
+npx tailwindcss -i ./src/css/app.css -o ./src/css/main.css --watch
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
