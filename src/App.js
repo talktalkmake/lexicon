@@ -29,13 +29,13 @@ function App() {
     return (words.length === 0)
       ? <p>There are no words</p>
       : <>
-        <table>
+        <table className='table-auto shadow w-full'>
           <tbody>
             {words.map((word, i) => {
               return (
                 <tr key={`${word}-${i}`}>
-                  <td>{word}</td>
-                  <td><button onClick={() => removeWord(word)} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
+                  <td className='px-4 py-2'>{word}</td>
+                  <td className='px-4 py-2'><button onClick={() => removeWord(word)} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
                 </tr>
               )
             })}
