@@ -2,16 +2,17 @@ import React, { useReducer, useState } from 'react';
 import './css/main.css';
 
 const ACTION = {
-  'ADDWORD': 'addWord'
+  'ADDWORD': 'addWord',
+  'REMOVEWORD': 'removeWord'
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'addWord':
+    case ACTION.ADDWORD:
       return [...state, action.word];
       break;
 
-    case 'removeWord':
+    case ACTION.REMOVEWORD:
       return [...state.filter(word => word !== action.word)];
       break;
 
@@ -35,7 +36,7 @@ function App() {
               return (
                 <tr key={`${word}-${i}`}>
                   <td className='px-4 py-2'>{word}</td>
-                  <td className='px-4 py-2'><button onClick={() => removeWord(word)} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
+                  <td className='px-4 py-2'><button onClick={() => dispatch({ type: ACTION.REMOVEWORD, word }} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
                 </tr>
               )
             })}
@@ -44,16 +45,12 @@ function App() {
       </>
   }
 
-  function removeWord(word) {
-    dispatch({ type: 'removeWord', word })
-  }
-
   return (
-    <div className="App">
+    <div className="App p-4">
       <h1 className='text-5xl'>Lexicon</h1>
       <form onSubmit={e => {
         e.preventDefault();
-        dispatch({ type: 'addWord', word });
+        dispatch({ type: ACTION.ADDWORD, word });
         setWord('');
       }}>
         <input type='text' value={word} onChange={e => setWord(e.target.value)} />
