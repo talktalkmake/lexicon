@@ -6,14 +6,17 @@ const ACTION = {
   'REMOVEWORD': 'removeWord'
 }
 
+// const isWordInLexicon = (word, definitions) => definitions.findIndex(definition => definition.word === word) > -1 ? true : false
+
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION.ADDWORD:
+      // Add case for checking if the word is already in state
       return [...state, action.definition];
       break;
 
     case ACTION.REMOVEWORD:
-      return [...state.filter(word => word !== action.word)];
+      return [...state.filter(word => word !== action.wordInLexicon)];
       break;
 
     default:
@@ -23,7 +26,7 @@ const reducer = (state, action) => {
 
 function App() {
 
-  const [words, dispatch] = useReducer(reducer, [])
+  const [lexicon, dispatch] = useReducer(reducer, [])
   const [word, setWord] = useState('')
   const [definition, setDefinition] = useState('')
 
@@ -42,28 +45,34 @@ function App() {
       .catch(err => console.error(err));
   }
 
-  function ListWords({ words }) {
-    return (words.length === 0)
+  function ShowLexicon({ lexicon }) {
+    return (lexicon.length === 0)
       ? <p>There are no words</p>
       : <>
-        <table className='table-auto shadow w-full'>
-          <tbody>
-            {words.map((word, i) =>
-              <tr key={`${word.word}-${i}`}>
-                <td className='px-4 py-2'>
-                  {word.word}
-                  {word.definitions.map(definition => <dl><dt>{definition.partOfSpeech}</dt><dd>{definition.definition}</dd></dl>)}
-                </td>
-                <td className='px-4 py-2'><button onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })} className='bg-red-600 text-white px-4 py-2 rounded-full'>remove</button></td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        {lexicon.map((wordInLexicon, i) =>
+          <section
+            key={`${wordInLexicon.word}-${i}`}
+            className='shadow bg-white rounded p-10 mt-10'>
+            <article className='relative'>
+              <button
+                className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
+                onClick={() => dispatch({ type: ACTION.REMOVEWORD, wordInLexicon })}>
+                remove
+              </button>
+              <h3 className='text-2xl font-semibold uppercase tracking-widest'>{wordInLexicon.word}</h3>
+              {wordInLexicon.definitions.map(definition =>
+                <dl key={definition.definition}>
+                  <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
+                  <dd className='text-xl'>{definition.definition}</dd>
+                </dl>)}
+            </article>
+          </section >
+        )}
       </>
   }
 
   return (
-    <div className="App p-4">
+    <div className="container p-4">
       <h1 className='text-5xl'>Lexicon</h1>
       <form onSubmit={e => {
         e.preventDefault();
@@ -77,16 +86,14 @@ function App() {
       </form>
       {definition
         && <section>
-          {definition.definitions.map(definition => <dl><dd>{definition.partOfSpeech}</dd><dt>{definition.definition}</dt></dl>)}
+          {definition.definitions.map(definition => <dl key={definition.definition}><dd>{definition.partOfSpeech}</dd><dt>{definition.definition}</dt></dl>)}
           <button
             onClick={() => dispatch({ type: ACTION.ADDWORD, definition })}
-            className='bg-green-300 px-4 py-2 hover:bg-green-400'>Add {definition.word} to Lexicon</button>
+            className='bg-green-300 px-4 py-2 hover:bg-green-400'>
+            Add {definition.word} to Lexicon
+          </button>
         </section>}
-      <ListWords words={words}></ListWords>
-      <pre>{JSON.stringify(words, null, 2)}</pre>
-      {/* Make a collection of words */}
-      {/* Add word to collection */}
-      {/* Remove word from collection */}
+      <ShowLexicon lexicon={lexicon}></ShowLexicon>
       {/* Look up a word (and its synonyms, antonyms, etc.) */}
     </div>
   );
