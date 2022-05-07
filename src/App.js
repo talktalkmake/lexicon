@@ -57,7 +57,10 @@ function App() {
               onClick={() => dispatch({ type: ACTION.REMOVEWORD, wordInLexicon })}>
               remove
             </button>
-            <h3 className='text-2xl font-semibold uppercase tracking-widest'>{wordInLexicon.word}</h3>
+            <header className='flex'>
+              <h3 className='text-2xl font-semibold uppercase tracking-widest'>{wordInLexicon.word}</h3>
+              <p>{lexicon.length}</p>
+            </header>
             {wordInLexicon.definitions.map(definition =>
               <dl key={definition.definition}>
                 <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
