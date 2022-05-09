@@ -1,8 +1,21 @@
-### TailwindCSS
-Run TailwindCSS:
-npx tailwindcss -i ./src/css/app.css -o ./src/css/main.css --watch
-You can now run: 
+#### TODO: 
+
+1. Clip the defintions list to a single entry
+   1. Add a button to show more defintions
+2. Check the HTTP status in case of no word found via API lookup
+   1. Tell the user there was no word found for _fehfehf_
+3. Handle error on netwrok failure
+
+#### TailwindCSS
+
+
+    npx tailwindcss -i ./src/css/app.css -o ./src/css/main.css --watch
+
+Or use this shortcut: 
+
     npm run tailwindcss
+
+---
 
 # Getting Started with Create React App
 
