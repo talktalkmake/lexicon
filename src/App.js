@@ -7,8 +7,6 @@ const ACTION = {
   'REMOVEWORD': 'removeWord'
 }
 
-// const isWordInLexicon = (word, definitions) => definitions.findIndex(definition => definition.word === word) > -1 ? true : false
-
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION.ADDWORD:
