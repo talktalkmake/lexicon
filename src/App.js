@@ -15,7 +15,7 @@ const reducer = (state, action) => {
       break;
 
     case ACTION.REMOVEWORD:
-      return [...state.filter(word => word !== action.wordInLexicon)];
+      return [...state.filter(word => word.word !== action.word)];
       break;
 
     default:
@@ -44,30 +44,28 @@ function App() {
       .catch(err => console.error(err));
   }
 
-  function ShowDefinitionList(lexicon) {
+  function ShowDefinitionList({ word, definitions }) {
     return (<>
-      {lexicon.map((wordInLexicon, i) =>
-        <section
-          key={`${wordInLexicon.word}-${i}`}
-          className='shadow bg-white rounded p-10 mt-10'>
-          <article className='relative'>
-            <button
-              className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
-              onClick={() => dispatch({ type: ACTION.REMOVEWORD, wordInLexicon })}>
-              remove
-            </button>
-            <header className='flex'>
-              <h3 className='text-2xl font-semibold uppercase tracking-widest'>{wordInLexicon.word}</h3>
-              <p>{lexicon.length}</p>
-            </header>
-            {wordInLexicon.definitions.map(definition =>
-              <dl key={definition.definition}>
-                <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
-                <dd className='text-xl'>{definition.definition}</dd>
-              </dl>)}
-          </article>
-        </section >
-      )}
+      <section
+        key={word}
+        className='shadow bg-white rounded p-10 mt-10'>
+        <article className='relative'>
+          <button
+            className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
+            onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
+            remove
+          </button>
+          <header className='flex'>
+            <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
+            <p>{definitions.length}</p>
+          </header>
+          {definitions.map(definition =>
+            <dl key={definition.definition}>
+              <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
+              <dd className='text-xl'>{definition.definition}</dd>
+            </dl>)}
+        </article>
+      </section >
     </>
     );
   }
@@ -78,7 +76,7 @@ function App() {
         <p className='mt-10 text-3xl'>Your lexicon has no words</p>
         <p className='mt-2 text-xl'>Search for a word at the top of the page.</p>
       </>
-      : ShowDefinitionList(lexicon)
+      : lexicon.map(word => ShowDefinitionList(word))
   }
 
   return (
