@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import './css/main.css';
 import isWordInLexicon from './functions/isWordInLexicon';
 
@@ -7,13 +7,24 @@ const ACTION = {
   'REMOVEWORD': 'removeWord'
 }
 
+function setLocalStorage(state) {
+  localStorage.setItem('lexicon', JSON.stringify(state))
+}
+function getLocalStorage() {
+  return localStorage.getItem('lexicon')
+    ? JSON.parse(localStorage.getItem('lexicon'))
+    : false;
+}
+
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION.ADDWORD:
+      setLocalStorage([action.newWord, ...state]);
       return [action.newWord, ...state];
       break;
 
     case ACTION.REMOVEWORD:
+      setLocalStorage([...state.filter(word => word.word !== action.word)]);
       return [...state.filter(word => word.word !== action.word)];
       break;
 
@@ -24,7 +35,7 @@ const reducer = (state, action) => {
 
 function App() {
 
-  const [lexicon, dispatch] = useReducer(reducer, [])
+  const [lexicon, dispatch] = useReducer(reducer, getLocalStorage() || [])
   const [word, setWord] = useState('')
   const [definition, setDefinition] = useState('')
 

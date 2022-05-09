@@ -5,8 +5,7 @@
 2. Check the HTTP status in case of no word found via API lookup
    1. Tell the user there was no word found for _fehfehf_
 3. Handle error on netwrok failure
-4. Save lexicon to localstorage
-5. Retrieve leixcon from local storate on load
+4. Retrieve leixcon from local storate on load
 
 #### TailwindCSS
 
