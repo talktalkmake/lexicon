@@ -58,7 +58,7 @@ function App() {
     return (<>
       <section
         key={word}
-        className='shadow bg-white rounded p-10 mt-10'>
+        className='shadow bg-white rounded p-4 mb-10 sm:p-10'>
         <article className='relative'>
           {isWordInLexicon(word, lexicon)
             ? <button
@@ -103,14 +103,16 @@ function App() {
 
   return (
     <div>
-      <header className='bg-zinc-900 flex align-center justify-between px-5 py-2'>
+      <header className='bg-zinc-900 sm:flex align-center justify-between px-5 py-2'>
         <h1 className='text-2xl text-white'>Lexicon</h1>
         <form onSubmit={e => {
           e.preventDefault();
           // dispatch({ type: ACTION.ADDWORD, word });
           getWordFromAPI();
           setWord('');
-        }}>
+        }}
+          className='flex'
+        >
           <input
             className='form-control px-3 py-2 rounded-l-lg'
             type='text'
@@ -118,12 +120,12 @@ function App() {
             onChange={e => setWord(e.target.value)} />
           <button
             className='bg-pink-300 rounded-r-lg text-red-900 px-4 py-2'>
-            Search for word
+            Search
           </button>
           {/* <button type='submit' className='bg-blue-500 rounded-lg text-white px-4 py-2'>Add new word to collection</button> */}
         </form>
       </header>
-      <div className='container p-10'>
+      <div className='container p-4 sm:p-10'>
         {definition && ShowDefinitionList(definition)}
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
       </div>
