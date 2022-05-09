@@ -10,8 +10,7 @@ const ACTION = {
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION.ADDWORD:
-      // Add case for checking if the word is already in state
-      return [...state, action.definition];
+      return [action.newWord, ...state];
       break;
 
     case ACTION.REMOVEWORD:
@@ -50,11 +49,23 @@ function App() {
         key={word}
         className='shadow bg-white rounded p-10 mt-10'>
         <article className='relative'>
-          <button
-            className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
-            onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
-            remove
-          </button>
+          {isWordInLexicon(word, lexicon)
+            ? <button
+              className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
+              onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
+              remove
+            </button>
+            : <button
+              onClick={() => {
+                dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
+                setDefinition('');
+              }
+              }
+              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-0 right-0'>
+              Add {word} to Lexicon
+            </button>
+          }
+
           <header className='flex'>
             <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
             <p>{definitions.length}</p>
@@ -102,15 +113,7 @@ function App() {
         </form>
       </header>
       <div className='container p-10'>
-        {definition
-          && <section>
-            {definition.definitions.map(definition => <dl key={definition.definition}><dd>{definition.partOfSpeech}</dd><dt>{definition.definition}</dt></dl>)}
-            <button
-              onClick={() => dispatch({ type: ACTION.ADDWORD, definition })}
-              className='bg-green-300 px-4 py-2 hover:bg-green-400'>
-              Add {definition.word} to Lexicon
-            </button>
-          </section>}
+        {definition && ShowDefinitionList(definition)}
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
       </div>
       {/* Look up a word (and its synonyms, antonyms, etc.) */}
