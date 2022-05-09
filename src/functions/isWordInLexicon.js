@@ -1,0 +1,1 @@
+export default function isWordInLexicon(word, lexicon) { return lexicon.findIndex(w => w.word === word) > -1 ? true : false }

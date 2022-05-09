@@ -1,5 +1,6 @@
 import React, { useReducer, useState } from 'react';
 import './css/main.css';
+import isWordInLexicon from './functions/isWordInLexicon';
 
 const ACTION = {
   'ADDWORD': 'addWord',
