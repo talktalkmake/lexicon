@@ -1,6 +1,8 @@
 ### TailwindCSS
 Run TailwindCSS:
 npx tailwindcss -i ./src/css/app.css -o ./src/css/main.css --watch
+You can now run: 
+    npm run tailwindcss
 
 # Getting Started with Create React App
 
