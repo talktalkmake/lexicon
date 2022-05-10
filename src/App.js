@@ -56,38 +56,36 @@ function App() {
 
   function ShowDefinitionList({ word, definitions }) {
     return (<>
-      <section
+      <article
         key={word}
-        className='shadow bg-white rounded p-4 mb-10 sm:p-10'>
-        <article className='relative'>
-          {isWordInLexicon(word, lexicon)
-            ? <button
-              className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-0 right-0'
-              onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
-              remove
-            </button>
-            : <button
-              onClick={() => {
-                dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
-                setDefinition('');
-              }
-              }
-              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-0 right-0'>
-              Add {word} to Lexicon
-            </button>
-          }
+        className='shadow bg-white rounded p-4 mb-10 sm:p-10 relative'>
+        {isWordInLexicon(word, lexicon)
+          ? <button
+            className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10'
+            onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
+            remove
+          </button>
+          : <button
+            onClick={() => {
+              dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
+              setDefinition('');
+            }
+            }
+            className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-0 right-0'>
+            Add {word} to Lexicon
+          </button>
+        }
 
-          <header className='flex'>
-            <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
-            <p>{definitions.length}</p>
-          </header>
-          {definitions.map(definition =>
-            <dl key={definition.definition}>
-              <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
-              <dd className='text-xl'>{definition.definition}</dd>
-            </dl>)}
-        </article>
-      </section >
+        <header className='flex'>
+          <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
+          <p>{definitions.length}</p>
+        </header>
+        {definitions.map(definition =>
+          <dl key={definition.definition}>
+            <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
+            <dd className='text-xl'>{definition.definition}</dd>
+          </dl>)}
+      </article >
     </>
     );
   }
