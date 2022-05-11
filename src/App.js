@@ -1,6 +1,7 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import './css/main.css';
 import isWordInLexicon from './functions/isWordInLexicon';
+import { BookOpenIcon, TrashIcon, SearchIcon } from '@heroicons/react/outline'
 
 const ACTION = {
   'ADDWORD': 'addWord',
