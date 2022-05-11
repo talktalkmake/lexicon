@@ -1,7 +1,8 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import './css/main.css';
 import isWordInLexicon from './functions/isWordInLexicon';
-import { BookOpenIcon, TrashIcon, SearchIcon } from '@heroicons/react/outline'
+import { PlusCircleIcon, BookOpenIcon, TrashIcon, SearchIcon } from '@heroicons/react/outline'
+import Spinner from './components/Spinner';
 
 const ACTION = {
   'ADDWORD': 'addWord',
@@ -40,6 +41,7 @@ function App() {
   const [word, setWord] = useState('');
   const [definition, setDefinition] = useState('');
   const [showMore, setShowMore] = useState(new Array(lexicon.length).fill(true));
+  const [isLoading, setIsLoading] = useState(false);
 
   function getWordFromAPI() {
     const options = {
@@ -52,7 +54,10 @@ function App() {
 
     fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`, options)
       .then(response => response.json())
-      .then(response => setDefinition(response))
+      .then(response => {
+        setDefinition(response);
+        setIsLoading(false);
+      })
       .catch(err => console.error(err));
   }
 
@@ -75,7 +80,8 @@ function App() {
           ? <button
             className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10'
             onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
-            remove</button>
+            <TrashIcon className="h-5 w-5 text-white" />
+          </button>
           :
           <>
             <button
@@ -83,8 +89,10 @@ function App() {
                 dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
                 setDefinition('');
               }}
-              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10'>
-              Add to Lexicon</button>
+              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10 flex items-center'>
+              <PlusCircleIcon className="h-5 w-5 mr-2" />
+              Add to Lexicon
+            </button>
           </>
         }
 
@@ -129,11 +137,17 @@ function App() {
 
   return (
     <div>
-      <header className='bg-zinc-900 sm:flex align-center justify-between px-5 py-2'>
-        <h1 className='text-2xl text-white'>Lexicon</h1>
+      {isLoading && <Spinner></Spinner>}
+      <header
+        className='bg-zinc-900 sm:flex align-center justify-between px-5 py-2 items-center'>
+        <div
+          className='flex items-center'>
+          <BookOpenIcon className="h-7 w-7 text-white mr-2" />
+          <h1 className='text-2xl text-white'>Lexicon</h1>
+        </div>
         <form onSubmit={e => {
           e.preventDefault();
-          // dispatch({ type: ACTION.ADDWORD, word });
+          setIsLoading(true);
           getWordFromAPI();
           setWord('');
         }}
@@ -145,8 +159,9 @@ function App() {
             value={word}
             onChange={e => setWord(e.target.value)} />
           <button
-            className='bg-pink-300 rounded-r-lg text-red-900 px-4 py-2'>
-            Search
+            className='bg-green-300 hover:bg-green-400 rounded-r-lg  px-4 py-2'
+          >
+            <SearchIcon className="h-5 w-5" />
           </button>
           {/* <button type='submit' className='bg-blue-500 rounded-lg text-white px-4 py-2'>Add new word to collection</button> */}
         </form>
