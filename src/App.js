@@ -102,7 +102,9 @@ function App() {
         </header>
         {definitions.map(({definition, partOfSpeech}) =>
           <dl key={definition}>
-            <dt className='italic font-serif pt-5'><span className={`py-1 px-3 rounded ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span></dt>
+            <dt className='italic font-serif pt-5'>
+              <span className={`py-1 px-3 rounded ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span>
+            </dt>
             <dd className='text-xl'>{definition}</dd>
           </dl>
         )}
@@ -165,7 +167,6 @@ function App() {
           {/* <button type='submit' className='bg-blue-500 rounded-lg text-white px-4 py-2'>Add new word to collection</button> */}
         </form>
       </header>
-      <div className='container p-4 sm:p-10'>
       <div className='container p-4 sm:p-10 mx-auto'>
         {definition && ShowDefinitionList(definition)}
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
