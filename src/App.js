@@ -1,8 +1,10 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import './css/main.css';
-import isWordInLexicon from './functions/isWordInLexicon';
 import { PlusCircleIcon, BookOpenIcon, TrashIcon, SearchIcon } from '@heroicons/react/outline'
 import Spinner from './components/Spinner';
+import isWordInLexicon from './functions/isWordInLexicon';
+import getPartOfSpeech from './functions/getPartOfSpeech';
+import GoodHTMLResponse from './functions/goodHTMLResponse';
 
 const ACTION = {
   'ADDWORD': 'addWord',
@@ -42,8 +44,9 @@ function App() {
   const [definition, setDefinition] = useState('');
   const [showMore, setShowMore] = useState(new Array(lexicon.length).fill(true));
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({'status': false, 'word' : ''});
 
-  function getWordFromAPI() {
+  async function getWordFromAPI() {
     const options = {
       method: 'GET',
       headers: {
@@ -52,13 +55,21 @@ function App() {
       }
     }
 
-    fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`, options)
-      .then(response => response.json())
-      .then(response => {
-        setDefinition(response);
+    try {
+      const getJson = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`, options);
+      if (!GoodHTMLResponse(getJson.status)) {
+        setError({'status': true, 'word': word});
+        setDefinition([]);
         setIsLoading(false);
-      })
-      .catch(err => console.error(err));
+        return;
+      }
+      const json = await getJson.json();
+      setDefinition(json);
+      setError({'status': false, 'word' : ''});
+      setIsLoading(false);
+    } catch ( error ) {
+      console.error(error);
+    }
   }
 
   const handleSetShowMore = i => {
@@ -168,7 +179,11 @@ function App() {
         </form>
       </header>
       <div className='container p-4 sm:p-10 mx-auto'>
-        {definition && ShowDefinitionList(definition)}
+        {
+        (definition && !error.status)
+          ? ShowDefinitionList(definition)
+          : <h3 className='text-2xl text-center mb-4'>Could not find a definition for <span className='font-bold'>{error.word}</span>. Please try again</h3>
+        }
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
       </div>
       {/* Look up a word (and its synonyms, antonyms, etc.) */}
@@ -177,18 +192,3 @@ function App() {
 }
 
 export default App;
-
-const getPartOfSpeech = wordType => {
-  switch(wordType){
-    case 'noun':
-      return 'bg-emerald-100';
-    case 'verb':
-      return 'bg-indigo-100';
-    case 'adverb':
-      return 'bg-lime-100';
-    case 'adjective':
-      return 'bg-rose-100';
-    default:
-      return 'red';
-  }
-}
