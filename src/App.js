@@ -38,11 +38,8 @@ const reducer = (state, action) => {
 }
 
 function App() {
-
   // State
   const [lexicon, dispatch] = useReducer(reducer, getLocalStorage() || []);
-  const [word, setWord] = useState('');
-  const [definition, setDefinition] = useState('');
   // The string in the search bar
   const [word, setWord] = useState(false);
   // a list of defintitions for the given word
@@ -67,12 +64,12 @@ function App() {
       const getJson = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`, options);
       if (!GoodHTMLResponse(getJson.status)) {
         setError({'status': true, 'word': word});
-        setDefinition([]);
+        setDefinitions([]);
         setIsLoading(false);
         return;
       }
       const json = await getJson.json();
-      setDefinition(json);
+      setDefinitions(json);
       setError({'status': false, 'word' : ''});
       setIsLoading(false);
     } catch ( error ) {
@@ -106,7 +103,7 @@ function App() {
             <button
               onClick={() => {
                 dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
-                setDefinition('');
+                setDefinitions('');
               }}
               className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10 flex items-center'>
               <PlusCircleIcon className="h-5 w-5 mr-2" />
@@ -176,7 +173,7 @@ function App() {
           <input
             className='form-control px-3 py-2 rounded-l-lg'
             type='text'
-            value={word}
+            value={word || ''}
             onChange={e => setWord(e.target.value)} />
           <button
             className='bg-green-300 hover:bg-green-400 rounded-r-lg  px-4 py-2'
@@ -187,11 +184,12 @@ function App() {
         </form>
       </header>
       <div className='container p-4 sm:p-10 mx-auto'>
-        {
-        (definition && !error.status)
-          ? ShowDefinitionList(definition)
-          : <h3 className='text-2xl text-center mb-4'>Could not find a definition for <span className='font-bold'>{error.word}</span>. Please try again</h3>
+        {error.status
+          && <h3 className='text-2xl text-center mb-4'>Could not find a definition for
+            <span className='font-bold'>{error.word}</span>
+            . Please try again</h3>
         }
+        {!error.status && definitions && ShowDefinitionList(definitions)}
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
       </div>
       {/* Look up a word (and its synonyms, antonyms, etc.) */}
