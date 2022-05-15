@@ -72,7 +72,7 @@ function App() {
     const multipleDefinitions = numberOfDefinitions > 1;
     const truncated = multipleDefinitions && showMore[i];
     const inLexicon = isWordInLexicon(word, lexicon);
-    return (<>
+    return (
       <article
         key={word}
         className={`${truncated && `overflow-hidden max-h-64 `}shadow bg-white rounded p-4 pb-16 mb-10 sm:p-10 sm:pb-20 relative`}>
@@ -121,8 +121,7 @@ function App() {
             >Show less</button>
           </footer>
         }
-      </article >
-    </>
+      </article>
     );
   }
 
