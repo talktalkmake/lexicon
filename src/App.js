@@ -39,11 +39,19 @@ const reducer = (state, action) => {
 
 function App() {
 
+  // State
   const [lexicon, dispatch] = useReducer(reducer, getLocalStorage() || []);
   const [word, setWord] = useState('');
   const [definition, setDefinition] = useState('');
+  // The string in the search bar
+  const [word, setWord] = useState(false);
+  // a list of defintitions for the given word
+  const [definitions, setDefinitions] = useState(false);
+  // Are the given word's definitions truncated?
   const [showMore, setShowMore] = useState(new Array(lexicon.length).fill(true));
+  // Tell the user if processing is happening behind the scenes
   const [isLoading, setIsLoading] = useState(false);
+  // If the given word has no defintions (e.g. "rarararrareee"), tell the user
   const [error, setError] = useState({'status': false, 'word' : ''});
 
   async function getWordFromAPI() {
