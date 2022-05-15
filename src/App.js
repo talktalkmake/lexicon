@@ -100,10 +100,10 @@ function App() {
           <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
           <p>{numberOfDefinitions}</p>
         </header>
-        {definitions.map(definition =>
-          <dl key={definition.definition}>
-            <dt className='italic font-serif pt-5'>{definition.partOfSpeech}</dt>
-            <dd className='text-xl'>{definition.definition}</dd>
+        {definitions.map(({definition, partOfSpeech}) =>
+          <dl key={definition}>
+            <dt className='italic font-serif pt-5'><span className={`py-1 px-3 rounded ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span></dt>
+            <dd className='text-xl'>{definition}</dd>
           </dl>
         )}
         {truncated ?
