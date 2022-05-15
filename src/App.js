@@ -166,6 +166,7 @@ function App() {
         </form>
       </header>
       <div className='container p-4 sm:p-10'>
+      <div className='container p-4 sm:p-10 mx-auto'>
         {definition && ShowDefinitionList(definition)}
         <ShowLexicon lexicon={lexicon}></ShowLexicon>
       </div>
