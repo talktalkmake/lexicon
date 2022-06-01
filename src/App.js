@@ -21,13 +21,9 @@ const reducer = (state, action) => {
     case ACTION.ADDWORD:
       setLocalStorage([action.newWord, ...state]);
       return [action.newWord, ...state];
-      break;
-
     case ACTION.REMOVEWORD:
       setLocalStorage([...state.filter(word => word.word !== action.word)]);
       return [...state.filter(word => word.word !== action.word)];
-      break;
-
     default:
       return state;
   }
@@ -45,7 +41,7 @@ function App() {
   // Tell the user if processing is happening behind the scenes
   const [isLoading, setIsLoading] = useState(false);
   // If the given word has no defintions (e.g. "rarararrareee"), tell the user
-  const [error, setError] = useState({'status': false, 'word' : ''});
+  const [error, setError] = useState({ 'status': false, 'word': '' });
 
   async function getWordFromAPI() {
     const options = {
@@ -59,16 +55,16 @@ function App() {
     try {
       const getJson = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`, options);
       if (!GoodHTMLResponse(getJson.status)) {
-        setError({'status': true, 'word': word});
+        setError({ 'status': true, 'word': word });
         setDefinitions([]);
         setIsLoading(false);
         return;
       }
       const json = await getJson.json();
       setDefinitions(json);
-      setError({'status': false, 'word' : ''});
+      setError({ 'status': false, 'word': '' });
       setIsLoading(false);
-    } catch ( error ) {
+    } catch (error) {
       console.error(error);
     }
   }
@@ -87,12 +83,12 @@ function App() {
     return (
       <article
         key={word}
-        className={`${truncated && `overflow-hidden max-h-64 `}shadow bg-white rounded p-4 pb-16 mb-10 sm:p-10 sm:pb-20 relative`}>
+        className={`${truncated && `overflow-hidden max-h-64 `}shadow bg-white rounded p-4 pb-16 mb-10 sm:pb-20 relative`}>
         {inLexicon
           ? <button
-            className='bg-red-600 text-white px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10'
+            className='bg-white text-red-700 hover:text-white hover:bg-red-700 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-4 sm:right-4'
             onClick={() => dispatch({ type: ACTION.REMOVEWORD, word })}>
-            <TrashIcon className="h-5 w-5 text-white" />
+            <TrashIcon className="h-5 w-5" />
           </button>
           :
           <>
@@ -101,34 +97,33 @@ function App() {
                 dispatch({ type: ACTION.ADDWORD, newWord: { word, definitions: [...definitions] } });
                 setDefinitions('');
               }}
-              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-10 sm:right-10 flex items-center'>
+              className='bg-green-300 hover:bg-green-400 px-4 py-2 rounded-full absolute top-4 right-4 sm:top-4 sm:right-4 flex items-center'>
               <PlusCircleIcon className="h-5 w-5 mr-2" />
               Add to Lexicon
             </button>
           </>
         }
-
         <header className='flex'>
           <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
           <p>{numberOfDefinitions}</p>
         </header>
-        {definitions.map(({definition, partOfSpeech}) =>
-          <dl key={definition}>
-            <dt className='italic font-serif pt-5'>
-              <span className={`py-1 px-3 rounded ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span>
+        {definitions.map(({ definition, partOfSpeech }) =>
+          <dl key={definition} className='flex mt-2'>
+            <dt className=' mr-2'>
+              <span className={`font-serif ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span>
             </dt>
-            <dd className='text-xl'>{definition}</dd>
+            <dd className='text-base'>{definition}</dd>
           </dl>
         )}
         {truncated ?
-          <footer className='bg-gradient-to-t from-white absolute left-0 right-0 bottom-0 h-40'>
+          <footer className='bg-gradient-to-t from-white absolute left-0 right-0 bottom-0 h-10'>
             <button
               onClick={() => handleSetShowMore(i)}
               className='bg-gray-500 text-white px-4 py-2 rounded-full absolute bottom-4 left-1/2 -translate-x-1/2'
             >Show more</button>
           </footer>
           :
-          <footer className='absolute left-0 right-0 bottom-0 h-40'>
+          <footer className='absolute left-0 right-0 bottom-0 h-10'>
             <button
               onClick={() => handleSetShowMore(i)}
               className='bg-gray-100 px-4 py-2 rounded-full absolute bottom-4 left-1/2 -translate-x-1/2'
@@ -179,6 +174,8 @@ function App() {
           {/* <button type='submit' className='bg-blue-500 rounded-lg text-white px-4 py-2'>Add new word to collection</button> */}
         </form>
       </header>
+      <nav>
+      </nav>
       <div className='container p-4 sm:p-10 mx-auto'>
         {error.status
           && <h3 className='text-2xl text-center mb-4'>Could not find a definition for
