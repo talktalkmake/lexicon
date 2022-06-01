@@ -6,6 +6,7 @@ import isWordInLexicon from './functions/isWordInLexicon';
 import getPartOfSpeech from './functions/getPartOfSpeech';
 import GoodHTMLResponse from './functions/goodHTMLResponse';
 import ACTION from './functions/ACTION';
+import titleCase from './functions/titleCase.js';
 
 function setLocalStorage(state) {
   localStorage.setItem('lexicon', JSON.stringify(state))
@@ -104,13 +105,13 @@ function App() {
           </>
         }
         <header className='flex'>
-          <h3 className='text-2xl font-semibold uppercase tracking-widest'>{word}</h3>
-          <p>{numberOfDefinitions}</p>
+          <h3 className='text-2xl italic font-serif mr-1'>{titleCase(word)}</h3>
+          <p className='italic'>{numberOfDefinitions}</p>
         </header>
         {definitions.map(({ definition, partOfSpeech }) =>
           <dl key={definition} className='flex mt-2'>
             <dt className=' mr-2'>
-              <span className={`font-serif ${getPartOfSpeech(partOfSpeech)}`}>{partOfSpeech}</span>
+              <span className={`font-serif ${getPartOfSpeech(partOfSpeech)}`}>{titleCase(partOfSpeech)}</span>
             </dt>
             <dd className='text-base'>{definition}</dd>
           </dl>
