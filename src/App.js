@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState } from 'react';
 import './css/main.css';
 import { PlusCircleIcon, BookOpenIcon, TrashIcon, SearchIcon } from '@heroicons/react/outline'
 import Spinner from './components/Spinner';
