@@ -5,11 +5,7 @@ import Spinner from './components/Spinner';
 import isWordInLexicon from './functions/isWordInLexicon';
 import getPartOfSpeech from './functions/getPartOfSpeech';
 import GoodHTMLResponse from './functions/goodHTMLResponse';
-
-const ACTION = {
-  'ADDWORD': 'addWord',
-  'REMOVEWORD': 'removeWord'
-}
+import ACTION from './functions/ACTION';
 
 function setLocalStorage(state) {
   localStorage.setItem('lexicon', JSON.stringify(state))
